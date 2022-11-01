@@ -69,7 +69,7 @@ public class Person {
 	
 	@OneToMany(mappedBy = "id_doctor", fetch = FetchType.LAZY, cascade = CascadeType.ALL )
 	@JsonIgnore
-	private List<Appointment> appointmentsDoctor;
+	private List<Prescription> prescsDoctor;
 
 	public Person() {
 		super();

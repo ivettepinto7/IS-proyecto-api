@@ -28,6 +28,7 @@ import com.grupo25.hospital.models.dtos.CreatePrescriptionDTO;
 import com.grupo25.hospital.models.dtos.ExpedienteDTO;
 import com.grupo25.hospital.models.dtos.GetEntityDTO;
 import com.grupo25.hospital.models.dtos.MessageDTO;
+import com.grupo25.hospital.models.dtos.PrescriptionInfoDTO;
 import com.grupo25.hospital.models.dtos.UpdatePassDTO;
 import com.grupo25.hospital.models.dtos.UserPrescriptionDTO;
 import com.grupo25.hospital.models.entities.Appointment;
@@ -40,6 +41,7 @@ import com.grupo25.hospital.repositories.PrescriptionRepository;
 import com.grupo25.hospital.services.AppointmentService;
 import com.grupo25.hospital.services.DrugService;
 import com.grupo25.hospital.services.PersonService;
+import com.grupo25.hospital.services.PrescriptionService;
 
 @RestController
 @RequestMapping("/doctor")
@@ -55,14 +57,11 @@ public class DoctorContoller {
 	private DrugService drugService;
 	
 	@Autowired
-	private AppointmentRepository appointmentRepository;
+	private AppointmentService appointService;
 	
 	@Autowired
-	private PrescriptionRepository prescriptionRepository;
-	
-	@Autowired
-	private DrugRepository drugRepository;
-	
+	private PrescriptionService prescService;
+			
 	@GetMapping("/drugs")
 	public ResponseEntity<?> getAllDrugs(){
 		try {
@@ -140,10 +139,31 @@ public class DoctorContoller {
 	}
 	
 	@PostMapping("/citas-dia/consulta/receta/crear")
-	public ResponseEntity<MessageDTO> createPrescription(@RequestBody CreatePrescriptionDTO receta,BindingResult result){
+	public ResponseEntity<?> createPrescription(@RequestBody CreatePrescriptionDTO receta,BindingResult result){
 		try {
+			if(result.hasErrors()) {
+				String errors = result.getAllErrors().toString();
+				return new ResponseEntity<>(
+						new MessageDTO("Errores en validacion" + errors),
+						HttpStatus.BAD_REQUEST);
+			}
+			Person foundPerson = personService.getPersonAuthenticated();
+			Appointment foundAppointment = appointService.getById(receta.getId_appointment());
 			
-			//TODO implementar logica de crear 
+			if(foundAppointment == null) {
+				return new ResponseEntity<>(
+						new MessageDTO("Cita no encontrada"),
+						HttpStatus.NOT_FOUND);
+			}
+			for (int i = 0; i < receta.getMedicines().size(); i++) {
+			    Drug drug = drugService.findOneById(receta.getMedicines().get(i).getMedicine());
+			    System.out.println(drug.getName());
+			    PrescriptionInfoDTO p = new PrescriptionInfoDTO();
+			    p.setDoses(receta.getMedicines().get(i).getDoses());
+			    p.setQuantity(receta.getMedicines().get(i).getQuantity());
+			    p.setIndication(receta.getIndication());
+			    prescService.insert(foundPerson,foundAppointment, drug, p);
+			}
 			return new ResponseEntity<>(
 					new MessageDTO("Receta creada"),
 					HttpStatus.CREATED);
@@ -153,20 +173,6 @@ public class DoctorContoller {
 					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
-	/*@GetMapping("/citas-dia")
-	public ResponseEntity<List<CitasDiaDTO>> getDayAppointments(GetEntityDTO doctor ,BindingResult result){
-		try {
-			//TODO implementar logica de obtener usuarios
-			List<CitasDiaDTO> listaCitas= new ArrayList<>();
-			return new ResponseEntity<List<CitasDiaDTO>>(
-					listaCitas,
-					HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<>(
-					HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}*/
 	
 	@GetMapping("/citas-dia/consulta/expediente/{id}")
 	public ResponseEntity<List<ExpedienteDTO>> getUserExpediente(@PathVariable Long id){
@@ -198,50 +204,7 @@ public class DoctorContoller {
 	
 	
 	
-	@PostMapping("/citas-dia/consulta/agregar-prescripcion")
-	public ResponseEntity<MessageDTO> getDayAppointments(@Valid @RequestBody AddPrescriptionDTO prescription,
-			BindingResult result){
-		try {
-			//TODO implementar logica de obtener usuarios
-			
-			if(result.hasErrors()) {
-				return new ResponseEntity<>(
-						new MessageDTO("Error"),
-						HttpStatus.INTERNAL_SERVER_ERROR);
-			}
-			
-			Prescription a = new Prescription();
-			
-			
-			
-			a.setQuantity(prescription.getQuantity());
-			a.setDaily_amount(prescription.getDaily_amount());
-			a.setId_appointment(appointmentRepository.findById(prescription.getId_appoinment()).orElse(null));
-			a.setIndication(prescription.getIndication());
-			a.setId_drug(drugRepository.findById(prescription.getId_drug()).orElse(null));
-			
-			
-			
-			prescriptionRepository.save(a);
-			
-			
-			
-			
-			return new ResponseEntity<>(
-					new MessageDTO("Prescripcion agregada"),
-					HttpStatus.OK);
-			
-		} catch (Exception e) {
-			System.out.println(e.toString());
-			return new ResponseEntity<>(
-					new MessageDTO("Error interno"),
-					HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
-	
-	
-	
-	@PutMapping("/citas-dia/consulta/finalizar")
+	/*@PutMapping("/citas-dia/consulta/finalizar")
 	public ResponseEntity<MessageDTO> finishAppointment(@Valid @RequestBody AppoinmentIdDTO appoinment,BindingResult result){
 		try {
 			
@@ -267,5 +230,6 @@ public class DoctorContoller {
 					new MessageDTO("Error interno"),
 					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-	}
+	}*/
+
 }

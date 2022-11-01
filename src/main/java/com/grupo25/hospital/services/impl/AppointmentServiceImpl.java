@@ -187,6 +187,11 @@ public class AppointmentServiceImpl implements AppointmentService{
 		return AppointmentsAux;
 	}
 
+	@Override
+	public Appointment getById(Long id) throws Exception {
+		return appointmentRepo.getById(id);
+	}
+
 	
 
 	

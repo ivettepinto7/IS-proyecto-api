@@ -40,80 +40,80 @@ public class Prescription {
 	@JoinColumn(name = "id_drug")
 	private Drug id_drug;
 	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "id_doctor")
+	private Person id_doctor;
 	
 	public Prescription() {
 		super();
 	}
 
-
-	public Prescription(Appointment id_appointment, String indication, Float daily_amount, Integer quantity,
-			Drug id_drug) {
+	public Prescription(Long id_prescription, Appointment id_appointment, String indication, Float daily_amount,
+			Integer quantity, Drug id_drug, Person id_doctor) {
 		super();
+		this.id_prescription = id_prescription;
 		this.id_appointment = id_appointment;
 		this.indication = indication;
 		this.daily_amount = daily_amount;
 		this.quantity = quantity;
 		this.id_drug = id_drug;
+		this.id_doctor = id_doctor;
 	}
-
 
 	public Long getId_prescription() {
 		return id_prescription;
 	}
 
-
 	public void setId_prescription(Long id_prescription) {
 		this.id_prescription = id_prescription;
 	}
-
 
 	public Appointment getId_appointment() {
 		return id_appointment;
 	}
 
-
 	public void setId_appointment(Appointment id_appointment) {
 		this.id_appointment = id_appointment;
 	}
-
 
 	public String getIndication() {
 		return indication;
 	}
 
-
 	public void setIndication(String indication) {
 		this.indication = indication;
 	}
-
 
 	public Float getDaily_amount() {
 		return daily_amount;
 	}
 
-
 	public void setDaily_amount(Float daily_amount) {
 		this.daily_amount = daily_amount;
 	}
-
 
 	public Integer getQuantity() {
 		return quantity;
 	}
 
-
 	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
 	}
-
 
 	public Drug getId_drug() {
 		return id_drug;
 	}
 
-
 	public void setId_drug(Drug id_drug) {
 		this.id_drug = id_drug;
+	}
+
+	public Person getId_doctor() {
+		return id_doctor;
+	}
+
+	public void setId_doctor(Person id_doctor) {
+		this.id_doctor = id_doctor;
 	}
 	
 	
