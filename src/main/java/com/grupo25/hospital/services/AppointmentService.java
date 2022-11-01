@@ -29,4 +29,6 @@ public interface AppointmentService {
 	
 	List<Appointment> getAllAppointments(Long id_patient) throws Exception;
 	
+	Appointment getById(Long id) throws Exception;
+	
 }

@@ -32,10 +32,6 @@ public class Appointment {
 	@JoinColumn(name = "id_patient")
 	private Person id_patient;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "id_doctor", nullable = true)
-	private Person id_doctor;
-	
 	@Column(name = "appointment_time")
 	private LocalDateTime timestamp;
 	
@@ -72,12 +68,11 @@ public class Appointment {
 	private List<Appointment> appointments;
 
 
-	public Appointment(Person id_patient, Person id_doctor, LocalDateTime timestamp, Boolean status,
+	public Appointment(Person id_patient, LocalDateTime timestamp, Boolean status,
 			String appointment_details, Appointment_type id_appointment_type, Inmunization id_inmunization,
 			Area id_area, Test id_test, Vaccine id_vaccine) {
 		super();
 		this.id_patient = id_patient;
-		this.id_doctor = id_doctor;
 		this.timestamp = timestamp;
 		this.status = status;
 		this.appointment_details = appointment_details;
@@ -113,16 +108,6 @@ public class Appointment {
 
 	public void setId_patient(Person id_patient) {
 		this.id_patient = id_patient;
-	}
-
-
-	public Person getId_doctor() {
-		return id_doctor;
-	}
-
-
-	public void setId_doctor(Person id_doctor) {
-		this.id_doctor = id_doctor;
 	}
 
 
