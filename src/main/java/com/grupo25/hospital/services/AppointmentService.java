@@ -21,6 +21,7 @@ public interface AppointmentService {
 	void registerSInmu(SecretaryScheduleAppointmentDTO newSchedule,Appointment_type type,Vaccine vaccine, Person person) throws Exception;
 	void registerSArea(SecretaryScheduleAppointmentDTO newSchedule,Appointment_type type,Area area, Person person) throws Exception;
 	void registerSTest(SecretaryScheduleAppointmentDTO newSchedule,Appointment_type type,Test test, Person person) throws Exception;
+	void endUpAppointment(Appointment appointment) throws Exception;
 	List<Appointment> findTodayAppointments(LocalDateTime timestamp,LocalDateTime timestamp2) throws Exception;
 	
 	List<Appointment> getPrevAppointments(Long id_patient) throws Exception;
