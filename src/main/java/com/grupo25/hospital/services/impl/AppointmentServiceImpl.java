@@ -192,6 +192,13 @@ public class AppointmentServiceImpl implements AppointmentService{
 		return appointmentRepo.getById(id);
 	}
 
+	@Override
+	@Transactional(rollbackOn = Exception.class)
+	public void endUpAppointment(Appointment appointment) throws Exception {
+		appointment.setStatus(true);
+		appointmentRepo.save(appointment);
+	}
+
 	
 
 	
