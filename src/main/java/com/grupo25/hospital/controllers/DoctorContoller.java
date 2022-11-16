@@ -226,7 +226,7 @@ public class DoctorContoller {
 	
 	
 	
-	/*@PutMapping("/citas-dia/consulta/finalizar")
+	@PutMapping("/citas-dia/consulta/finalizar")
 	public ResponseEntity<MessageDTO> finishAppointment(@Valid @RequestBody AppoinmentIdDTO appoinment,BindingResult result){
 		try {
 			
@@ -252,6 +252,6 @@ public class DoctorContoller {
 					new MessageDTO("Error interno"),
 					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-	}*/
+	}
 
 }
