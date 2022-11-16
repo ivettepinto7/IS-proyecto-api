@@ -202,6 +202,28 @@ public class DoctorContoller {
 		}
 	}
 	
+	@PutMapping("/citas-dia/consulta/finalizar/{id}")
+	public ResponseEntity<?> endUpAppointment(@PathVariable(name = "id") Long id){
+		try {
+			Appointment foundAppointment = appointmentService.getById(id);
+			
+			if(foundAppointment != null) {
+				appointmentService.endUpAppointment(foundAppointment);
+				
+				return new ResponseEntity<>(
+						new MessageDTO("Cita finalizada con éxito"),
+						HttpStatus.OK);
+			}
+			
+			return new ResponseEntity<>(
+					new MessageDTO("Cita no encontrada"),
+					HttpStatus.NOT_FOUND);
+		} catch (Exception e) {
+			return new ResponseEntity<>(
+					HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
 	
 	
 	/*@PutMapping("/citas-dia/consulta/finalizar")
