@@ -223,35 +223,5 @@ public class DoctorContoller {
 					HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
-	
-	
-	@PutMapping("/citas-dia/consulta/finalizar")
-	public ResponseEntity<MessageDTO> finishAppointment(@Valid @RequestBody AppoinmentIdDTO appoinment,BindingResult result){
-		try {
-			
-			if(result.hasErrors()) {
-				String errors = result.getAllErrors().toString();
-				return new ResponseEntity<>(
-						new MessageDTO("Errores en validacion" + errors),
-	                    HttpStatus.BAD_REQUEST
-	                );
-	        }
-			
-			Appointment a = appointmentRepository.getAppointmentById(appoinment.getId_appointment());
-			a.setStatus(false);
-			appointmentRepository.save(a);
-			
-			return new ResponseEntity<>(
-					new MessageDTO("Consulta finalizada"),
-					HttpStatus.OK);
-			
-		} catch (Exception e) {
-			System.out.println(e.toString());
-			return new ResponseEntity<>(
-					new MessageDTO("Error interno"),
-					HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
 
 }
