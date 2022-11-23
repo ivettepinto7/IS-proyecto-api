@@ -27,7 +27,7 @@ public class PrescriptionServiceImpl implements PrescriptionService{
 	private AppointmentRepository appointmentRepository;
 	
 	@Autowired
-	private PrescriptionRepository prescRepo;
+	private PrescriptionRepository prescriptionRepository;
 	
 	@Override
 	@Transactional(rollbackOn = Exception.class)
@@ -40,12 +40,9 @@ public class PrescriptionServiceImpl implements PrescriptionService{
 		presc.setDaily_amount(prescription.getDoses());
 		presc.setQuantity(prescription.getQuantity());
 		
-		prescRepo.save(presc);
+		prescriptionRepository.save(presc);
 		
 	}
-	
-	@Autowired
-	private PrescriptionRepository prescriptionRepository;
 	
 	@Override
 	public List<Prescription> getPatientPrescriptions(Long id_patient) throws Exception {
