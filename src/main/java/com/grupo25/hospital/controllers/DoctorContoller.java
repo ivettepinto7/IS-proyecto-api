@@ -155,15 +155,23 @@ public class DoctorContoller {
 						new MessageDTO("Cita no encontrada"),
 						HttpStatus.NOT_FOUND);
 			}
-			for (int i = 0; i < receta.getMedicines().size(); i++) {
-			    Drug drug = drugService.findOneById(receta.getMedicines().get(i).getMedicine());
-			    System.out.println(drug.getName());
+			if(receta.getMedicines().size() != 0) {
+				for (int i = 0; i < receta.getMedicines().size(); i++) {
+				    Drug drug = drugService.findOneById(receta.getMedicines().get(i).getMedicine());
+				    PrescriptionInfoDTO p = new PrescriptionInfoDTO();
+				    p.setDoses(receta.getMedicines().get(i).getDoses());
+				    p.setQuantity(receta.getMedicines().get(i).getQuantity());
+				    p.setIndication(receta.getIndication());
+				    prescService.insert(foundPerson,foundAppointment, drug, p);
+				}
+				appointmentService.insertAppointmentDetails(foundAppointment, receta.getIndication());
+			} else {
 			    PrescriptionInfoDTO p = new PrescriptionInfoDTO();
-			    p.setDoses(receta.getMedicines().get(i).getDoses());
-			    p.setQuantity(receta.getMedicines().get(i).getQuantity());
 			    p.setIndication(receta.getIndication());
-			    prescService.insert(foundPerson,foundAppointment, drug, p);
+				prescService.insert(foundPerson,foundAppointment, null, p);
+				appointmentService.insertAppointmentDetails(foundAppointment, receta.getIndication());
 			}
+			
 			return new ResponseEntity<>(
 					new MessageDTO("Receta creada"),
 					HttpStatus.CREATED);

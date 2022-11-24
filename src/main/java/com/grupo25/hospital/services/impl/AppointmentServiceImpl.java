@@ -199,6 +199,13 @@ public class AppointmentServiceImpl implements AppointmentService{
 		appointmentRepo.save(appointment);
 	}
 
+	@Override
+	@Transactional(rollbackOn = Exception.class)
+	public void insertAppointmentDetails(Appointment appointment, String details) throws Exception {
+		appointment.setAppointment_details(details);
+		appointmentRepo.save(appointment);
+	}
+
 	
 
 	
