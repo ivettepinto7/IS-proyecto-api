@@ -164,10 +164,12 @@ public class DoctorContoller {
 				    p.setIndication(receta.getIndication());
 				    prescService.insert(foundPerson,foundAppointment, drug, p);
 				}
+				appointmentService.insertAppointmentDetails(foundAppointment, receta.getIndication());
 			} else {
 			    PrescriptionInfoDTO p = new PrescriptionInfoDTO();
 			    p.setIndication(receta.getIndication());
 				prescService.insert(foundPerson,foundAppointment, null, p);
+				appointmentService.insertAppointmentDetails(foundAppointment, receta.getIndication());
 			}
 			
 			return new ResponseEntity<>(
