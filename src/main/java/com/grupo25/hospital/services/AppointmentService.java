@@ -22,6 +22,7 @@ public interface AppointmentService {
 	void registerSArea(SecretaryScheduleAppointmentDTO newSchedule,Appointment_type type,Area area, Person person) throws Exception;
 	void registerSTest(SecretaryScheduleAppointmentDTO newSchedule,Appointment_type type,Test test, Person person) throws Exception;
 	void endUpAppointment(Appointment appointment) throws Exception;
+	void insertAppointmentDetails(Appointment appointment, String details) throws Exception;
 	List<Appointment> findTodayAppointments(LocalDateTime timestamp,LocalDateTime timestamp2) throws Exception;
 	
 	List<Appointment> getPrevAppointments(Long id_patient) throws Exception;
